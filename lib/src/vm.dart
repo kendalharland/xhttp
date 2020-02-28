@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:http/http.dart' show ByteStream, ClientException;
-
+import 'byte_stream.dart';
+import 'client_exception.dart';
 import 'request.dart';
 import 'response.dart';
 import 'round_tripper.dart';

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:pedantic/pedantic.dart' show unawaited;
-import 'package:http/http.dart' show ClientException;
 
 import 'byte_stream.dart';
+import 'client_exception.dart';
 import 'request.dart';
 import 'response.dart';
 import 'round_tripper.dart';

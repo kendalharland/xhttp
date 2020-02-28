@@ -1,7 +1,5 @@
 import 'package:test/test.dart';
 import 'package:xhttp/src/byte_stream.dart';
-import 'package:xhttp/src/request.dart';
-import 'package:xhttp/src/response.dart';
 import 'package:xhttp/xhttp.dart';
 
 import 'src/callback_round_tripper.dart';
@@ -38,6 +36,41 @@ void main() {
 
       expect(response.request.method, MethodGet);
       expect(response.request.url, url);
+    });
+
+    group('post', () {
+      test('sends a POST $Request', () async {
+        final client = Client.withRoundTripper(CallbackRoundTripper(
+          doSend: (r) => Future.value(_emptyResponse(r)),
+          doClose: () {},
+        ));
+
+        final url = Uri.parse('http://test.com');
+        final response = await client.post(
+          url,
+          contentType: 'test-content',
+          bodyBytes: <int>[1, 2, 3],
+        );
+        client.close();
+
+        expect(response.request.method, MethodPost);
+        expect(response.request.url, url);
+        expect(response.request.headers,
+            containsPair('content-type', 'test-content'));
+      });
+
+      test('only sets content-type header if non-null', () async {
+         final client = Client.withRoundTripper(CallbackRoundTripper(
+          doSend: (r) => Future.value(_emptyResponse(r)),
+          doClose: () {},
+        ));
+
+        final url = Uri.parse('http://test.com');
+        final response = await client.post(url);
+        client.close();
+
+        expect(response.request.headers.containsKey('content-type'), false);
+      });
     });
   });
 }

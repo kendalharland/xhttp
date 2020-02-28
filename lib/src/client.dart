@@ -44,12 +44,22 @@ class Client {
   ///
   /// If you need more fine-grained control over the request headers or other
   /// parameters, use [send].
-  Future<Response> post(Uri url, String contentType, List<int> body) {
+  Future<Response> post(
+    Uri url, {
+    String contentType,
+    List<int> bodyBytes = const <int>[],
+  }) {
+    assert(bodyBytes != null);
+    final body = ByteStream.fromBytes(bodyBytes);
+    final headers = <String, String>{};
+    if (contentType != null) {
+      headers['content-type'] = contentType;
+    }
     final request = Request(
       method: MethodPost,
       url: url,
-      headers: <String, String>{'content-type': contentType},
-      bodyBytes: ByteStream.fromBytes(body),
+      headers: headers,
+      bodyBytes: body,
     );
     return send(request);
   }
