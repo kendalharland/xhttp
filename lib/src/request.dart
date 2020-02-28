@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
+import 'byte_stream.dart';
+
 // An HTTP request.
 class Request {
   /// Constructs a [Request].
@@ -13,11 +15,11 @@ class Request {
     @required String method,
     @required Uri url,
     Map<String, String> headers,
-    List<int> bodyBytes,
+    ByteStream bodyBytes,
   }) {
     assert(method != null);
     assert(url != null);
-    bodyBytes ??= <int>[];
+    bodyBytes ??= ByteStream.fromBytes(const []);
     headers ??= <String, String>{};
     headers = Map.from(headers); // Just in case this is immutable.
     return Request._(
@@ -53,10 +55,7 @@ class Request {
   final Uri url;
 
   /// The bytes of the request body.
-  final List<int> bodyBytes;
-
-  /// The number of bytes in [bodyBytes].
-  int get contentLength => bodyBytes?.length ?? 0;
+  final ByteStream bodyBytes;
 
   @override
   bool operator ==(Object other) =>

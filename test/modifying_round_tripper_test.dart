@@ -1,4 +1,5 @@
 import 'package:xhttp/xhttp.dart';
+import 'package:xhttp/src/byte_stream.dart';
 import 'package:test/test.dart';
 
 import 'src/callback_round_tripper.dart';
@@ -11,7 +12,10 @@ void main() {
       const value = 'Bearer token';
 
       final base = CallbackRoundTripper(
-        doSend: (request) async => Response(request: request, statusCode: 200),
+        doSend: (request) async => Response(
+            request: request,
+            statusCode: 200,
+            bodyBytes: ByteStream.fromBytes([])),
       );
 
       Request modify(Request request) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'byte_stream.dart';
 import 'request.dart';
 import 'response.dart';
 import 'round_tripper.dart';
@@ -48,7 +49,7 @@ class Client {
       method: MethodPost,
       url: url,
       headers: <String, String>{'content-type': contentType},
-      bodyBytes: body,
+      bodyBytes: ByteStream.fromBytes(body),
     );
     return send(request);
   }

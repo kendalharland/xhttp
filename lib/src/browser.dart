@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:pedantic/pedantic.dart' show unawaited;
 import 'package:http/http.dart' show ClientException;
 
+import 'byte_stream.dart';
 import 'request.dart';
 import 'response.dart';
 import 'round_tripper.dart';
@@ -41,15 +42,13 @@ class BrowserRoundTripper implements RoundTripper {
 
     var completer = Completer<Response>();
     unawaited(xhr.onLoad.first.then((_) {
-      // TODO(nweiz): Set the response type to "arraybuffer" when issue 18542
-      // is fixed.
       var blob = xhr.response as Blob ?? Blob([]);
       var reader = FileReader();
 
       reader.onLoad.first.then((_) {
-        var body = reader.result as Uint8List;
+        var bodyBytes = ByteStream.fromBytes(reader.result as Uint8List);
         final response = Response(
-          bodyBytes: body,
+          bodyBytes: bodyBytes,
           statusCode: xhr.status,
           request: request,
           headers: xhr.responseHeaders,
@@ -60,7 +59,9 @@ class BrowserRoundTripper implements RoundTripper {
 
       reader.onError.first.then((error) {
         completer.completeError(
-            ClientException(error.toString(), request.url), StackTrace.current);
+          ClientException(error.toString(), request.url),
+          StackTrace.current,
+        );
       });
 
       reader.readAsArrayBuffer(blob);

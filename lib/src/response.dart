@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:quiver/core.dart';
 
+import 'byte_stream.dart';
 import 'request.dart';
 
 // An HTTP response.
@@ -12,7 +13,7 @@ class Response {
   const Response({
     @required this.request,
     @required this.statusCode,
-    this.bodyBytes = const <int>[],
+    this.bodyBytes,
     this.statusText = '',
     this.headers = const {},
   })  : assert(request != null),
@@ -25,7 +26,7 @@ class Response {
   final Request request;
 
   /// The response body as a list of bytes.
-  final List<int> bodyBytes;
+  final ByteStream bodyBytes;
 
   /// The response headers.
   final Map<String, String> headers;
@@ -40,7 +41,8 @@ class Response {
   ///
   /// The encoding type is determeined by the response's 'charset' field in the
   /// 'content-type' header.
-  String get body => _encodingForHeaders(headers).decode(bodyBytes);
+  Future<String> get body =>
+      bodyBytes.bytesToString(_encodingForHeaders(headers));
 
   @override
   bool operator ==(Object other) =>

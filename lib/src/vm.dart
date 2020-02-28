@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:http/http.dart' show ByteStream, ClientException;
 
@@ -14,9 +13,8 @@ import 'round_tripper.dart';
 /// `round_tripper_stub.dart`.
 RoundTripper defaultRoundTripper() => VMRoundTripper();
 
-/// A `dart:io`-based HTTP client.
+/// A `dart:io`-based [RoundTripper].
 class VMRoundTripper extends RoundTripper {
-  /// The underlying `dart:io` HTTP client.
   HttpClient _inner;
 
   VMRoundTripper([HttpClient inner]) : _inner = inner ?? HttpClient();
@@ -24,15 +22,12 @@ class VMRoundTripper extends RoundTripper {
   /// Sends an HTTP request and asynchronously returns the response.
   @override
   Future<Response> send(Request request) async {
-    var requestBody = Uint8List.fromList(request.bodyBytes);
+    var requestBody = await request.bodyBytes.toBytes();
     var stream = ByteStream.fromBytes(requestBody ?? const []);
 
     try {
       var ioRequest = (await _inner.openUrl(request.method, request.url))
-        // ..followRedirects = request.followRedirects
-        // ..maxRedirects = request.maxRedirects
-        // ..persistentConnection = request.persistentConnection
-        ..contentLength = (request?.contentLength ?? -1);
+        ..contentLength = requestBody.length ?? -1;
       request.headers.forEach(ioRequest.headers.set);
 
       var response = await stream.pipe(ioRequest) as HttpClientResponse;
@@ -42,14 +37,14 @@ class VMRoundTripper extends RoundTripper {
         headers[key] = values.join(',');
       });
 
-      final body = await ByteStream(response).toBytes();
+      final bodyBytes = await ByteStream(response);
 
       return Response(
         headers: headers,
         request: request,
         statusCode: response.statusCode,
         statusText: response.reasonPhrase,
-        bodyBytes: body,
+        bodyBytes: bodyBytes,
       );
     } on HttpException catch (error) {
       throw ClientException(error.message, error.uri);
