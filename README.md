@@ -1,6 +1,6 @@
-# xhttp
-
 A cross-platform HTTP library for Dart with an emphasis on composition.
+
+[![pub package](https://img.shields.io/pub/v/xhttp.svg)](https://pub.dev/packages/xhttp)
 
 This is an alternative to [package:http].
 
