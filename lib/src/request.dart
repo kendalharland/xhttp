@@ -16,9 +16,16 @@ class Request {
     @required Uri url,
     Map<String, String> headers,
     ByteStream bodyBytes,
+    bool followRedirects = true,
+    int maxRedirects = 5,
   }) {
     assert(method != null);
     assert(url != null);
+    assert(followRedirects != null);
+    if (followRedirects) {
+      assert(maxRedirects != null);
+      assert(maxRedirects > 0);
+    }
     bodyBytes ??= ByteStream.fromBytes(const []);
     headers ??= <String, String>{};
     headers = Map.from(headers); // Just in case this is immutable.
@@ -27,6 +34,8 @@ class Request {
       bodyBytes: bodyBytes,
       url: url,
       headers: headers,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
     );
   }
 
@@ -36,6 +45,8 @@ class Request {
         url: other.url,
         headers: other.headers,
         bodyBytes: other.bodyBytes,
+        followRedirects: other.followRedirects,
+        maxRedirects: other.maxRedirects,
       );
 
   const Request._({
@@ -43,6 +54,8 @@ class Request {
     @required this.bodyBytes,
     @required this.url,
     @required this.headers,
+    @required this.followRedirects,
+    @required this.maxRedirects,
   });
 
   /// Headers to send with this request.
@@ -56,6 +69,16 @@ class Request {
 
   /// The bytes of the request body.
   final ByteStream bodyBytes;
+
+  /// Whether the client should follow redirects when resovling this request.
+  final bool followRedirects;
+
+  /// The maximum number of redirects to follow when [followRedirects] is true.
+  ///
+  /// If this is exceeded, the [BaseResponse] future completes with an error.
+  final int maxRedirects;
+
+  // TODO: Persistent connections.
 
   @override
   bool operator ==(Object other) =>

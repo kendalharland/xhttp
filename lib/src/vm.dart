@@ -27,6 +27,8 @@ class VMRoundTripper extends RoundTripper {
 
     try {
       var ioRequest = (await _inner.openUrl(request.method, request.url))
+        ..followRedirects = request.followRedirects
+        ..maxRedirects = request.maxRedirects
         ..contentLength = requestBody.length ?? -1;
       request.headers.forEach(ioRequest.headers.set);
 
