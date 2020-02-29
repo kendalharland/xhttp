@@ -1,6 +1,7 @@
 A cross-platform HTTP library for Dart with an emphasis on composition.
 
 [![pub package](https://img.shields.io/pub/v/xhttp.svg)](https://pub.dev/packages/xhttp)
+[![Build Status](https://travis-ci.org/kharland/xhttp.svg?branch=master)](https://travis-ci.org/kharland/xhttp)
 
 This is an alternative to [package:http].
 
@@ -19,7 +20,7 @@ clients. A common example is to embed authorization headers in every request:
 Code that embeds user credentials in HTTP requests ends up being repeated often
 in apps with many small components, such as Flutter apps. Those components often
 must work properly regardless of whether a user is signed in. Ideally, we'd be
-able to pass each component a `Client` object, and the component doesn't have 
+able to pass each component a `Client` object, and the component doesn't have
 to know whether the `Client` has been configured to send credentials (user
 signed in) or not (user signed out).
 

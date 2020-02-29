@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Add travis badge and fix broken config
+
 ## 0.2.2
 
 * Update readme with pub badge
