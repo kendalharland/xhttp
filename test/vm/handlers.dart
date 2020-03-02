@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:pedantic/pedantic.dart';
 import 'package:xhttp/src/byte_stream.dart';
 
 /// A Function that responds [HttpRequest] objects.
