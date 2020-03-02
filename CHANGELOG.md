@@ -1,3 +1,8 @@
+## 1.0.0
+
+* Remove Request/Response ==; this can never really be true
+  because each object's body is async and can't be compared.
+
 ## 0.2.3
 
 * Add travis badge and fix broken config

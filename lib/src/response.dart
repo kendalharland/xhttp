@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:quiver/core.dart';
 
 import 'byte_stream.dart';
 import 'request.dart';
@@ -39,23 +38,10 @@ class Response {
 
   /// The decoded body of this [Response].
   ///
-  /// The encoding type is determeined by the response's 'charset' field in the
+  /// The encoding type is determined by the response's 'charset' field in the
   /// 'content-type' header.
   Future<String> get body =>
       bodyBytes.bytesToString(_encodingForHeaders(headers));
-
-  @override
-  bool operator ==(Object other) =>
-      other is Response && other.hashCode == hashCode;
-
-  @override
-  int get hashCode => hashObjects([
-        request,
-        statusCode,
-        statusText,
-        bodyBytes,
-        headers,
-      ]);
 }
 
 /// Returns the encoding to use for a response with the given headers.

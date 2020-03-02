@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:quiver/core.dart';
 
 import 'byte_stream.dart';
 
@@ -77,18 +76,4 @@ class Request {
   ///
   /// If this is exceeded, the [BaseResponse] future completes with an error.
   final int maxRedirects;
-
-  // TODO: Persistent connections.
-
-  @override
-  bool operator ==(Object other) =>
-      other is Request && other.hashCode == hashCode;
-
-  @override
-  int get hashCode => hashObjects([
-        headers,
-        method,
-        url,
-        bodyBytes,
-      ]);
 }

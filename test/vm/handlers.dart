@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:pedantic/pedantic.dart';
 import 'package:xhttp/src/byte_stream.dart';
 
 /// A Function that responds [HttpRequest] objects.
@@ -33,13 +35,24 @@ Handler redirect(Uri to) {
   };
 }
 
-/// A [Handler] that contin
+/// A [Handler] that loops continuously.
 Handler loop(resolve(String path)) {
   int salt = 1;
   return (HttpRequest request) async {
     request.response
       ..statusCode = 302
       ..headers.set('location', resolve('/?${salt++}'));
+    return request.response.close();
+  };
+}
+
+/// A [Handler] that responds with [message], sets the charset to [charset].
+Handler sendEncoded(String charset, Object message) {
+  return (HttpRequest request) {
+    request.response
+      ..statusCode = 200
+      ..headers.set('content-type', 'text/plain; charset=$charset')
+      ..write(message);
     return request.response.close();
   };
 }
