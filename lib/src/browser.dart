@@ -31,7 +31,7 @@ class BrowserRoundTripper implements RoundTripper {
   /// Sends an HTTP request and asynchronously returns the response.
   @override
   Future<Response> send(Request request) async {
-    var bytes = await request.bodyBytes;
+    var bytes = await request.bodyBytes.toBytes();
     var xhr = HttpRequest();
     _xhrs.add(xhr);
     xhr

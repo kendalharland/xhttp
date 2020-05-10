@@ -1,5 +1,5 @@
 name: xhttp
-version: 1.0.0
+version: 1.0.1
 description: A cross platform client-side HTTP library for Dart.
 homepage: https://github.com/kharland/xhttp
 

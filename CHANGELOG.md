@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Fix browser request payload type
+
 ## 1.0.0
 
 * Remove Request/Response ==; this can never really be true
